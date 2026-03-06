@@ -1,0 +1,317 @@
+﻿@* @{
+    ViewData["Title"] = "Employee Workspace";
+    Layout = "_EmployeeLayout";
+}
+
+
+<style>
+    .k-grid {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    .badge-priority {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+
+    .status-badge {
+        color: #555;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container mt-4">
+    <h3>Employee Workspace - Unsolved Queries</h3>
+    <div id="unsolvedGrid"></div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#unsolvedGrid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: { url: "/Employee/GetUnsolvedQueries", dataType: "json" },
+                        update: {
+                            url: "/Employee/UpdateQueryStatus",
+                            type: "POST",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "c_QueryId",
+                            fields: {
+                                c_QueryId: { editable: false },
+                                c_Title: { editable: false },
+                                c_Priority: { editable: false },
+                                c_Status: { type: "string" },
+                                c_Comment: { type: "string" }
+                            }
+                        }
+                    }
+                },
+
+                columns: [
+                    { field: "c_Title", title: "Issue" },
+                    { field: "c_Priority", title: "Priority", width: "100px", template: "#= priorityTemplate(c_Priority) #" },
+                    { field: "c_Status", title: "Status", editor: statusDropDownEditor, width: "150px" },
+                    { field: "c_Comment", title: "Resolution Comment", hidden: true },
+                    { command: ["edit"], title: "Action", width: "120px" }
+                ],
+                editable: "popup",
+                edit: function (e) {
+                    // Customize the popup title
+                    e.container.data("kendoWindow").title("Update Resolution");
+                    // Hide fields we don't want them to edit in the popup
+                    e.container.find("label[for='c_Title']").parent().hide();
+                }
+            });
+        });
+
+        function priorityTemplate(priority) {
+            var color = priority === 'High' ? '#dc3545' : (priority === 'Medium' ? '#ffc107' : '#17a2b8');
+            return `<span class="badge-priority" style="background:${color}33; color:${color}; border: 1px solid ${color};">${priority}</span>`;
+        }
+
+        function statusDropDownEditor(container, options) {
+            $('<input name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataSource: ["In Progress", "Solved"]
+                });
+        }
+    </script>
+} *@
+
+
+@{
+    ViewData["Title"] = "Employee Workspace";
+    Layout = "_EmployeeLayout";
+}
+
+<style>
+    .workspace-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 10px 0;
+    }
+
+    .workspace-title {
+        font-size: 24px;
+        font-weight: 600;
+        color: #2d3436;
+    }
+
+    .workspace-subtitle {
+        font-size: 14px;
+        color: #6c757d;
+    }
+
+    .workspace-card {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .k-grid {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .k-grid-header {
+        background: #f8f9fa;
+        font-weight: 600;
+    }
+
+    .badge-priority {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 12px;
+        display: inline-block;
+    }
+
+    .grid-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .stats-box {
+        background: #f4f6f9;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: #555;
+    }
+</style>
+
+
+<div class="container-fluid mt-4">
+
+    <!-- Header -->
+    <div class="workspace-header">
+
+        <div>
+            <div class="workspace-title">
+                Employee Workspace
+            </div>
+            <div class="workspace-subtitle">
+                Manage and resolve user queries
+            </div>
+        </div>
+
+        <div class="stats-box">
+            Active Query Management
+        </div>
+    </div>
+
+    <!-- Grid Card -->
+    <div class="workspace-card">
+        <div class="grid-toolbar">
+            <h5 style="margin:0;">Unsolved Queries</h5>
+        </div>
+        <div id="unsolvedGrid"></div>
+    </div>
+
+</div>
+
+
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#unsolvedGrid").kendoGrid({
+
+                dataSource: {
+                    transport: {
+
+                        read: {
+                            url: "/Employee/GetUnsolvedQueries",
+                            dataType: "json"
+                        },
+
+                        update: {
+                            url: "/Employee/UpdateQueryStatus",
+                            type: "POST",
+                            dataType: "json"
+                        }
+
+                    },
+
+                    schema: {
+                        model: {
+                            id: "c_QueryId",
+                            fields: {
+                                c_QueryId: { editable: false },
+                                c_Title: { editable: false },
+                                c_Priority: { editable: false },
+                                c_Status: { type: "string" },
+                                c_Comment: { type: "string" }
+                            }
+                        }
+                    },
+
+                    pageSize: 10
+
+                },
+
+                height: 400,
+                pageable: true,
+                sortable: true,
+                filterable: true,
+                resizable: true,
+
+                columns: [
+
+                    {
+                        field: "c_Title",
+                        title: "Issue",
+                        width: "40%"
+                    },
+
+                    {
+                        field: "c_Priority",
+                        title: "Priority",
+                        width: "140px",
+                        template: "#= priorityTemplate(c_Priority) #"
+                    },
+
+                    {
+                        field: "c_Status",
+                        title: "Status",
+                        editor: statusDropDownEditor,
+                        width: "160px"
+                    },
+
+                    {
+                        field: "c_Comment",
+                        title: "Resolution Comment",
+                        hidden: true
+                    },
+
+                    {
+                        command: [
+                            {
+                                name: "edit",
+                                text: "Resolve"
+                            }
+                        ],
+                        title: "Action",
+                        width: "150px"
+                    }
+
+                ],
+
+                editable: "popup",
+
+                edit: function (e) {
+                    e.container.data("kendoWindow").title("Resolve Query");
+                    e.container.find("label[for='c_Title']").parent().hide();
+
+                }
+            });
+        });
+
+
+
+        function priorityTemplate(priority) {
+
+            var color = priority === 'High'
+                ? '#dc3545'
+                : (priority === 'Medium'
+                    ? '#f39c12'
+                    : '#17a2b8');
+
+            return `<span class="badge-priority" style="background:${color}20;color:${color};border:1px solid ${color};">${priority}</span>`;
+
+        }
+
+
+
+        function statusDropDownEditor(container, options) {
+
+            $('<input name="' + options.field + '"/>')
+                .appendTo(container)
+                .kendoDropDownList({
+                    dataSource: ["In Progress", "Solved"]
+                });
+
+        }
+
+    </script>
+
+}

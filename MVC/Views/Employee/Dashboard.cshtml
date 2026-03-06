@@ -1,0 +1,155 @@
+﻿@{
+    ViewData["Title"] = "Employee Dashboard";
+    Layout = "_EmployeeLayout";
+}
+
+<link rel="stylesheet" href="https://kendo.cdn.telerik.com/themes/13.0.0/default/default-main.css" />
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="k-icon k-i-Paste-plain-text"></i> Employee Workspace</h2>
+        <div id="performance-badge" class="p-2 border rounded bg-light">
+            <strong>My Solved Queries: </strong> <span id="solvedCount" class="badge bg-success">0</span>
+        </div>
+    </div>
+
+    <div id="employeeTabs">
+        <ul>
+            <li class="k-state-active">Active Queries</li>
+            <li>My Performance</li>
+        </ul>
+
+        <div>
+            <div id="unsolvedGrid"></div>
+        </div>
+
+        <div>
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Personal Metrics</h5>
+                            <hr />
+                            <div id="performanceChart" style="height: 250px;"></div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     
+    </div>
+</div>
+
+
+<script id="updateTemplate" type="text/x-kendo-template">
+    <div class="p-3">
+        <div class="mb-3">
+            <label class="fw-bold">Title:</label>
+            <span>#: c_Title #</span>
+        </div>
+        <div class="mb-3">
+            <label class="fw-bold">Description:</label>
+            <p class="text-muted">#: c_Description #</p>
+        </div>
+        <hr/>
+        <div class="k-edit-label"><label for="c_Status">Change Status</label></div>
+        <div class="k-edit-field">
+            <input name="c_Status" id="statusDDL" required />
+        </div>
+
+        <div class="k-edit-label mt-2"><label for="c_Comment">Resolution Comment</label></div>
+        <div class="k-edit-field">
+            <textarea name="c_Comment" class="k-textarea" style="width:100%; height:80px;" 
+                      placeholder="Enter details on how the issue was fixed..."></textarea>
+        </div>
+    </div>
+</script>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize Tabs
+            $("#employeeTabs").kendoTabStrip();
+
+            // Load Initial Performance Stats
+            loadPerformanceStats();
+
+
+            $("#unsolvedGrid").on("click", ".k-grid-cancel-changes", function () {
+                dataSource.cancelChanges();
+            });
+
+            // 1. Unsolved Queries Grid
+            $("#unsolvedGrid").kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: { url: "@Url.Action("GetUnsolvedQueries", "Employee")", dataType: "json" },
+                        update: { url: "@Url.Action("UpdateQueryStatus", "Employee")", type: "POST", dataType: "json" }
+                    },
+                    schema: {
+                        model: {
+                            id: "c_QueryId",
+                            fields: {
+                                c_QueryId: { type: "number" },
+                                c_Title: { type: "string" },
+                                c_Priority: { type: "string" },
+                                c_Status: { type: "string" },
+                                c_Comment: { type: "string" }
+                            }
+                        }
+                    },
+                    pageSize: 10
+                },
+                sortable: true,
+                filterable: true,
+                columns: [
+                    { field: "c_Title", title: "Query Title", width: "25%" },
+                    { field: "c_Priority", title: "Priority", width: "15%", template: p => renderPriority(p.c_Priority) },
+                    { field: "c_Status", title: "Current Status", width: "15%" },
+                    { field: "c_QueryDate", title: "Date Submitted", format: "{0:MM/dd/yyyy}", width: "15%" },
+                    { command: [{ name: "edit", text: "Resolve" }], title: "Actions", width: "15%" }
+                ],
+                editable: {
+                    mode: "popup",
+                    template: kendo.template($("#updateTemplate").html())
+                },
+                edit: function (e) {
+                    // Initialize DropDown in Popup
+                    e.container.find("#statusDDL").kendoDropDownList({
+                        dataSource: ["In Progress", "Solved"]
+                    });
+                    e.container.data("kendoWindow").title("Update Query Resolution");
+                },
+                save: function (e) {
+                    // Refresh performance stats after a successful solve
+                    setTimeout(loadPerformanceStats, 1000);
+                }
+            });
+        });
+
+        function renderPriority(priority) {
+            let color = priority === "High" ? "danger" : (priority === "Medium" ? "warning" : "info");
+            return `<span class="badge bg-${color}">${priority}</span>`;
+        }
+
+        function loadPerformanceStats() {
+            $.get("@Url.Action("GetPersonalMetrics", "Employee")", function (data) {
+                $("#solvedCount").text(data.solvedCount);
+
+                // Initialize Kendo Chart for Performance Tracking
+                $("#performanceChart").kendoChart({
+                    series: [{
+                        type: "pie",
+                        data: [
+                            { category: "Solved", value: data.solvedCount, color: "#28a745" },
+                            { category: "Active Issues", value: data.activeCount, color: "#ffc107" }
+                        ]
+                    }],
+                    tooltip: { visible: true, template: "${category}: ${value}" }
+                });
+            });
+        }
+
+    </script>
+}
