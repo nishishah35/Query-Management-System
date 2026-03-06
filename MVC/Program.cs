@@ -8,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IAdminInterface, AdminRepository>();
+builder.Services.AddScoped<IAccountInterface,AccountRepository>();
+builder.Services.AddScoped<IEmployeeInterface,EmployeeRepository>();
+
 
 builder.Services.AddScoped<NpgsqlConnection>(conn =>
 {
