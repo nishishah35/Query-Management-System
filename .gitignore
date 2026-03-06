@@ -1,0 +1,29 @@
+# Build folders
+bin/
+obj/
+
+# Ignore bin and obj in all subprojects
+**/bin/
+**/obj/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+
+# Rider / VSCode settings
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# ASP.NET temporary files
+wwwroot/lib/
+
+# NuGet packages
+packages/
+
+# OS files
+.DS_Store
+Thumbs.db
