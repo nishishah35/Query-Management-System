@@ -80,9 +80,11 @@
                         kendo.ui.progress($(".login-card"), false);
                         
                         if (response.success) {
+                            console.log(response);
                             // Redirect based on role returned from controller
-                            if (response.role === "admin") {
-                                window.location.href = '@Url.Action("AdminDashboard", "Dashboard")';
+                            if (response.role === "Admin") {
+
+                                window.location.href = '@Url.Action("GetAllQuery", "Admin")';
                             } else if (response.role === "employee") {
                                 window.location.href = '@Url.Action("EmpDashboard", "Employee")';
                             } else {
