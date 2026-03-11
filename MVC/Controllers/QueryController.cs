@@ -1,8 +1,10 @@
 namespace MVC.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
 using Repository.Interfaces;
 using Repository.Models;
 
+[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 public class QueryController : Controller
 {
     private readonly IQueryInterface _queryRepository;
@@ -15,6 +17,19 @@ public class QueryController : Controller
     // Page load
     public IActionResult QueryDashboard()
     {
+        if(HttpContext.Session.GetString("UserRole")==null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            return View();
+    }
+
+    public IActionResult Dashboard()
+    {
+        if(HttpContext.Session.GetString("UserRole")==null)
+        {
+            return RedirectToAction("Index","Home");
+        }
         return View();
     }
 
@@ -63,5 +78,13 @@ public class QueryController : Controller
         await _queryRepository.DeleteQuery(id);
 
         return Json(new { success = true });
+    }
+
+    [HttpGet]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Clear();
+        Response.Cookies.Delete(".AspNetCore.Session");
+        return RedirectToAction("Login", "Account");
     }
 }

@@ -38,6 +38,7 @@ $(document).ready(function () {
                     id: "c_UserId",
                     fields: {
                         c_UserId: { type: "number" },
+                        c_UserName: {type: "string" },
                         c_CompanyName: { type: "string" },
                         c_EmailId: { type: "string" }
                     }
@@ -54,6 +55,7 @@ $(document).ready(function () {
 
         columns: [
             { field: "c_UserId", title: "User ID", width: 120 },
+            { field: "c_UserName", title: "User Name" },
             { field: "c_CompanyName", title: "Company Name" },
             { field: "c_EmailId", title: "Email" },
             {

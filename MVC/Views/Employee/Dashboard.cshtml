@@ -346,6 +346,16 @@
                         read: { url: "@Url.Action("GetUnsolvedQueries", "Employee")", dataType: "json" },
                         update: { url: "@Url.Action("UpdateQueryStatus", "Employee")", type: "POST", dataType: "json" }
                     },
+                    requestEnd: function (e) {
+                        // Check if the action was an 'update'
+                        if (e.type === "update") {
+                            // If the backend returned successfully
+                            var grid = $("#unsolvedGrid").data("kendoGrid");
+                            grid.dataSource.read();
+                            grid.refresh();
+                            loadDashboardData();
+                        }
+                    },
                     schema: {
                         model: {
                             id: "c_QueryId",

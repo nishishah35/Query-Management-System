@@ -216,12 +216,11 @@
                             console.log(response);
                             // Redirect based on role returned from controller
                             if (response.role === "Admin") {
-
-                                window.location.href = '@Url.Action("GetAllQuery", "Admin")';
+                                window.location.href = '@Url.Action("Index", "Admin")';
                             } else if (response.role === "Employee") {
-                                window.location.href = '@Url.Action("EmpDashboard", "Employee")';
+                                window.location.href = '@Url.Action("Dashboard", "Employee")';
                             } else {
-                                window.location.href = '@Url.Action("QueryDashboard", "Query")';
+                                window.location.href = '@Url.Action("Dashboard", "Query")';
                             }
                         } else {
                             alert(response.message);

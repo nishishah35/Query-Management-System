@@ -25,11 +25,19 @@ namespace MVC.Controllers
 
         public IActionResult Index()
         {
+            if(HttpContext.Session.GetString("UserRole")==null)
+            {
+                return RedirectToAction("Index","Home");
+            }
             return View();
         }
 
         public IActionResult Query()
         {
+            if(HttpContext.Session.GetString("UserRole")==null)
+            {
+                return RedirectToAction("Index","Home");
+            }
             return View();
         }
 
@@ -44,6 +52,7 @@ namespace MVC.Controllers
         public async Task<IActionResult> GetAllQuery()
         {
             List<t_Query> queries = await _adminRepo.GetAllQuery();
+            // Console.WriteLine(queries[0].c_EmpId);
             return Json(queries);
         }
 
@@ -77,10 +86,10 @@ namespace MVC.Controllers
 
         public IActionResult GetAllUsersPage()
         {
-            // if(HttpContext.Session.GetString("Role")==null)
-            // {
-            //     return RedirectToAction("Index","Home");
-            // }
+            if(HttpContext.Session.GetString("UserRole")==null)
+            {
+                return RedirectToAction("Index","Home");
+            }
             return View();
         }
 
@@ -111,7 +120,7 @@ namespace MVC.Controllers
         {
             HttpContext.Session.Clear();
             Response.Cookies.Delete(".AspNetCore.Session");
-            return RedirectToAction("Login", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
