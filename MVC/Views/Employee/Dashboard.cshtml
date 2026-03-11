@@ -188,6 +188,7 @@
                         read: { url: "@Url.Action("GetUnsolvedQueries", "Employee")", dataType: "json" },
                         update: { url: "@Url.Action("UpdateQueryStatus", "Employee")", type: "POST", dataType: "json" }
                     },
+<<<<<<< HEAD
                     requestEnd: function(e) {
             if (e.type === "update") {
                 var grid = $("#unsolvedGrid").data("kendoGrid");
@@ -196,6 +197,18 @@
                 loadDashboardData(); // refresh dashboard counters
             }
         },
+=======
+                    requestEnd: function (e) {
+                        // Check if the action was an 'update'
+                        if (e.type === "update") {
+                            // If the backend returned successfully
+                            var grid = $("#unsolvedGrid").data("kendoGrid");
+                            grid.dataSource.read();
+                            grid.refresh();
+                            loadDashboardData();
+                        }
+                    },
+>>>>>>> c9eb8d9284431959f33bdf9a98d9edc411b1ab96
                     schema: {
                         model: {
                             id: "c_QueryId",

@@ -21,9 +21,9 @@ namespace Repository.Implementations
         {
             try
             {
-                var qry = @"SELECT c_queryid, c_userid, c_title, c_description, c_querydate, c_empid, c_status, c_comment FROM t_query";
+                var qry = @"SELECT q.c_queryid, q.c_userid, q.c_title, q.c_description, q.c_querydate, q.c_empid, e.c_empname, q.c_status, q.c_comment FROM t_query q LEFT JOIN t_employee e ON q.c_empid = e.c_empid";
 
-                using(var cmd = new NpgsqlCommand(qry, _conn))
+                using (var cmd = new NpgsqlCommand(qry, _conn))
                 {
                     List<t_Query> list = new List<t_Query>();
 
@@ -32,7 +32,7 @@ namespace Repository.Implementations
 
                     var reader = await cmd.ExecuteReaderAsync();
 
-                    while( await reader.ReadAsync())
+                    while (await reader.ReadAsync())
                     {
                         list.Add(new t_Query
                         {
@@ -44,14 +44,15 @@ namespace Repository.Implementations
                             c_QueryDate = (DateOnly)reader["c_querydate"],
                             // c_EmpId = reader.GetInt32(5),
                             c_EmpId = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5),
-                            c_Status = reader.GetString(6),
+                            c_EmpName = reader.IsDBNull(6) ? null : reader.GetString(6),
+                            c_Status = reader.GetString(7),
                             // c_Comment = reader.GetString(7),
-                            c_Comment = reader.IsDBNull(7) ? null : reader.GetString(7)
+                            c_Comment = reader.IsDBNull(8) ? null : reader.GetString(8)
                         });
                     }
                     await _conn.CloseAsync();
                     return list;
-                    
+
                 }
             }
             catch (Exception ex)
@@ -68,7 +69,7 @@ namespace Repository.Implementations
             {
                 var qry = @"SELECT c_queryid, c_userid, c_title, c_description, c_querydate, c_empid, c_status, c_comment FROM t_query WHERE c_queryid=@id";
 
-                using(var cmd = new NpgsqlCommand(qry, _conn))
+                using (var cmd = new NpgsqlCommand(qry, _conn))
                 {
                     cmd.Parameters.AddWithValue("@id", id);
 
@@ -76,8 +77,8 @@ namespace Repository.Implementations
                     await _conn.OpenAsync();
 
                     var reader = await cmd.ExecuteReaderAsync();
-                    
-                    if(await reader.ReadAsync())
+
+                    if (await reader.ReadAsync())
                     {
                         t_Query query = new t_Query()
                         {
@@ -88,7 +89,7 @@ namespace Repository.Implementations
                             // c_QueryDate = DateOnly.FromDateTime(Convert.ToDateTime(reader["c_querydate"])),
                             c_QueryDate = (DateOnly)reader["c_querydate"],
                             // c_EmpId = reader.GetInt32(5),
-                            c_EmpId = reader.IsDBNull(5) ? (int?)null : reader.GetInt32(5),
+                            c_EmpId = reader.GetInt32(5),
                             c_Status = reader.GetString(6),
                             // c_Comment = reader.GetString(7),
                             c_Comment = reader.IsDBNull(7) ? null : reader.GetString(7)
@@ -115,7 +116,7 @@ namespace Repository.Implementations
             {
                 var qry = @"DELETE FROM t_query WHERE c_queryid=@id";
 
-                using(var cmd = new NpgsqlCommand(qry, _conn))
+                using (var cmd = new NpgsqlCommand(qry, _conn))
                 {
                     cmd.Parameters.AddWithValue("@id", query.c_QueryId);
 
@@ -124,13 +125,13 @@ namespace Repository.Implementations
 
                     var result = await cmd.ExecuteNonQueryAsync();
                     await _conn.CloseAsync();
-                    
-                    if(result == 1)
+
+                    if (result == 1)
                     {
                         Console.WriteLine("Query Deleted Successfully...");
                         return result;
                     }
-                    else if(result == 0)
+                    else if (result == 0)
                     {
                         Console.WriteLine("Query Deletion Failed...");
                         return result;
@@ -147,13 +148,14 @@ namespace Repository.Implementations
                 return -1;
             }
         }
-      
-         public async Task<t_Dashboard> GetAll()
+
+        public async Task<t_Dashboard> GetAll()
         {
             var state = new t_Dashboard();
 
             try
             {
+                await _conn.CloseAsync();
                 await _conn.OpenAsync();
 
                 // total query
@@ -192,16 +194,17 @@ namespace Repository.Implementations
 
             return state;
         }
-       
-       public async Task<List<t_User>> GetAllUsers()
+
+        public async Task<List<t_User>> GetAllUsers()
         {
             List<t_User> list = new List<t_User>();
 
             try
             {
+                await _conn.CloseAsync();
                 await _conn.OpenAsync();
 
-                var qry = @"SELECT c_userid, c_companyname, c_emailid FROM t_users";
+                var qry = @"SELECT c_userid, c_empname, c_companyname, c_emailid FROM t_user";
 
                 NpgsqlCommand cmd = new NpgsqlCommand(qry, _conn);
 
@@ -212,8 +215,9 @@ namespace Repository.Implementations
                     list.Add(new t_User
                     {
                         c_UserId = reader.GetInt32(0),
-                        c_CompanyName = reader.GetString(1),
-                        c_EmailId = reader.GetString(2),
+                        c_UserName = reader.GetString(1),
+                        c_CompanyName = reader.GetString(2),
+                        c_EmailId = reader.GetString(3),
                     });
                 }
             }
@@ -233,9 +237,10 @@ namespace Repository.Implementations
         {
             try
             {
+                await _conn.CloseAsync();
                 await _conn.OpenAsync();
 
-                var qry = "DELETE FROM t_users WHERE c_userid = @id";
+                var qry = "DELETE FROM t_user WHERE c_userid = @id";
 
                 using var cmd = new NpgsqlCommand(qry, _conn);
                 cmd.Parameters.AddWithValue("@id", id);
@@ -247,7 +252,7 @@ namespace Repository.Implementations
                 await _conn.CloseAsync();
             }
         }
-        
+
 
     }
 }

@@ -9,6 +9,7 @@ using Repository.Interfaces;
 
 namespace MVC.Controllers
 {
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public class EmployeeController : Controller
     {
 
@@ -16,10 +17,23 @@ namespace MVC.Controllers
         public EmployeeController(IEmployeeInterface repo) { _repo = repo; }
 
 
-        public IActionResult EmpDashboard() => View();
+        public IActionResult EmpDashboard()
+        {
+            if(HttpContext.Session.GetString("UserRole")==null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            return View();
+        }
 
-
-        public IActionResult Dashboard() => View();
+        public IActionResult Dashboard()
+        {
+            if(HttpContext.Session.GetString("UserRole")==null)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            return View();
+        }
 
         [HttpGet]
         public async Task<JsonResult> GetUnsolvedQueries()
@@ -78,11 +92,12 @@ namespace MVC.Controllers
         //     });
         // }
 
-
+        [HttpGet]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Home");
+            Response.Cookies.Delete(".AspNetCore.Session");
+            return RedirectToAction("Login", "Account");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
