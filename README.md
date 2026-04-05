@@ -1,4 +1,3 @@
-
 # 🎫 Query Management System
 
 A web application to manage and resolve customer queries, built with ASP.NET Core MVC and PostgreSQL.
@@ -7,18 +6,21 @@ A web application to manage and resolve customer queries, built with ASP.NET Cor
 
 ## 🛠️ Tech Stack
 
-- **Framework:** ASP.NET Core 8 (MVC)
-- **Language:** C#
-- **Database:** PostgreSQL
-- **Auth:** Session-based Authentication
+![ASP.NET Core](https://img.shields.io/badge/ASP.NET_Core_8-512BD4?style=flat-square&logo=dotnet&logoColor=white)
+![C#](https://img.shields.io/badge/C%23-239120?style=flat-square&logo=c-sharp&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![MVC](https://img.shields.io/badge/MVC_Pattern-FF6C37?style=flat-square&logo=visualstudio&logoColor=white)
+![Session Auth](https://img.shields.io/badge/Session_Auth-F59E0B?style=flat-square&logoColor=white)
 
 ---
 
 ## 👥 User Roles
 
-- **Admin** — View all queries, manage users, access analytics
-- **Employee** — Resolve queries, track personal metrics
-- **User** — Submit and manage their own queries
+![Admin](https://img.shields.io/badge/🛡️_Admin-4F46E5?style=flat-square&logoColor=white) View all queries, manage users, access analytics
+
+![Employee](https://img.shields.io/badge/👷_Employee-0891B2?style=flat-square&logoColor=white) Resolve queries, track personal metrics
+
+![User](https://img.shields.io/badge/🧑‍💼_User-059669?style=flat-square&logoColor=white) Submit and manage their own queries
 
 ---
 
@@ -69,12 +71,21 @@ Query_Management_System/
 
 ## 🤝 Contributing
 
-1. Fork the repo
-2. Create a branch: `git checkout -b feature/YourFeature`
-3. Commit: `git commit -m "Add YourFeature"`
-4. Push: `git push origin feature/YourFeature`
-5. Open a Pull Request
+![Step 1](https://img.shields.io/badge/1-Fork_the_repo-6366F1?style=flat-square)
+![Step 2](https://img.shields.io/badge/2-Create_a_branch-0EA5E9?style=flat-square)
+![Step 3](https://img.shields.io/badge/3-Commit_changes-10B981?style=flat-square)
+![Step 4](https://img.shields.io/badge/4-Push_&_PR-F59E0B?style=flat-square)
+
+```bash
+git checkout -b feature/YourFeature
+git commit -m "Add YourFeature"
+git push origin feature/YourFeature
+```
 
 ---
 
-<div align="center">Made with ❤️ using ASP.NET Core & PostgreSQL</div>
+<div align="center">
+
+![Made with love](https://img.shields.io/badge/Made_with_❤️-ASP.NET_Core_&_PostgreSQL-EC4899?style=flat-square)
+
+</div>
