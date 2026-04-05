@@ -1,53 +1,54 @@
-# 🚀 Query Management System
+# Query Management System
 
-<p align="center">
-  <img src="https://img.shields.io/badge/ASP.NET-MVC-blue?style=for-the-badge&logo=dotnet" />
-  <img src="https://img.shields.io/badge/C%23-Programming-green?style=for-the-badge&logo=csharp" />
-  <img src="https://img.shields.io/badge/SQL-Server-red?style=for-the-badge&logo=microsoftsqlserver" />
-  <img src="https://img.shields.io/badge/Kendo-UI-orange?style=for-the-badge&logo=telerik" />
-</p>
+## 📌 Overview
+
+The Query Management System is a web-based application developed using ASP.NET MVC to streamline the process of handling user queries. It enables users to submit queries and allows administrators to manage, track, and resolve them efficiently.
 
 ---
 
-## 📌 Project Overview
+## 🎯 Objectives
 
-The **Query Management System** is a web-based application designed to manage and track user queries efficiently.
-It provides a structured platform for users to submit queries and for admins to manage and resolve them.
-
----
-
-## ✨ Features
-
-✅ User Registration & Login
-✅ Submit & Track Queries
-✅ Admin Dashboard
-✅ Query Status Management
-✅ Clean UI using Kendo UI
-✅ Secure Authentication System
+* Provide a centralized platform for query submission
+* Enable efficient query tracking and resolution
+* Improve communication between users and administrators
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology  | Description            |
-| ----------- | ---------------------- |
-| ASP.NET MVC | Backend Framework      |
-| C#          | Programming Language   |
-| SQL Server  | Database               |
-| Kendo UI    | Frontend UI Components |
+* **Backend:** ASP.NET MVC
+* **Language:** C#
+* **Database:** SQL Server
+* **Frontend:** HTML, CSS, JavaScript, Kendo UI
+
+---
+
+## ⚙️ Features
+
+### 👤 User Module
+
+* User Registration & Login
+* Submit Queries
+* View Query Status
+
+### 🛡️ Admin Module
+
+* Admin Dashboard
+* View All Queries
+* Update Query Status
+* Manage Users
 
 ---
 
 ## 📂 Project Structure
 
-```
+```bash
 Query-Management-System/
 │
-├── src/
-│   ├── Controllers/
-│   ├── Models/
-│   ├── Views/
-│   └── wwwroot/
+├── Controllers/
+├── Models/
+├── Views/
+├── wwwroot/
 │
 ├── Data/
 ├── Repository/
@@ -60,24 +61,24 @@ Query-Management-System/
 
 ---
 
-## ▶️ How to Run the Project
+## 🚀 Getting Started
 
-### Step 1: Clone the Repository
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/your-username/Query-Management-System.git
 ```
 
-### Step 2: Open Project
+### 2. Open Project
 
-* Open in **Visual Studio / VS Code**
+* Open the project in Visual Studio or VS Code
 
-### Step 3: Setup Database
+### 3. Configure Database
 
-* Configure connection string in `appsettings.json`
-* Run migrations / SQL script
+* Update connection string in `appsettings.json`
+* Apply migrations or run SQL scripts
 
-### Step 4: Run Project
+### 4. Run Application
 
 ```bash
 dotnet run
@@ -85,24 +86,37 @@ dotnet run
 
 ---
 
-## 📸 Screenshots
-
-> *(Add your project screenshots here for better presentation)*
-
----
-
-## 🔐 Authentication
+## 🔐 Authentication & Security
 
 * Secure login system
-* Role-based access (User / Admin)
+* Role-based access (Admin/User)
 
 ---
 
-## 💡 Future Enhancements
+## 🧪 Testing
 
-✨ Email Notifications
-✨ AI-based Query Suggestions
-✨ Mobile Responsive Design
-✨ Real-time Chat Support
+* Basic functionality tested for user and admin workflows
+* Validations applied on input fields
 
+---
 
+## 📈 Future Enhancements
+
+* Email notifications for query updates
+* Real-time tracking system
+* Mobile responsive UI
+* Integration with AI-based query suggestions
+
+---
+
+## 👩‍💻 Author
+
+**Nishi Shah**
+
+---
+
+## 📄 License
+
+This project is for academic and learning purposes.
+
+---
